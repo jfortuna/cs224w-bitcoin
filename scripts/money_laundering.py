@@ -7,10 +7,10 @@ import matplotlib as plt
 
 NODES = 10000
 EDGES = 25000
-NUM_RUN_THOUGHS = 100
+NUM_RUN_THOUGHS = 1
 NUM_ML_CASES = 100
 MID_WAY_LOW_BOUND = 15
-MID_WAY_HIGH_BOUND = 1000
+MID_WAY_HIGH_BOUND = 100
 PROBABILITY_REPLACEMENT = .25
 
 
@@ -19,7 +19,7 @@ def MoneyLaundering():
   nx.write_edgelist(synthetic_graph, 'random_money_launder.edgelist')
   ys_rnd = [] * (MID_WAY_HIGH_BOUND - MID_WAY_LOW_BOUND + 1)
   for i in range(NUM_RUN_THOUGHS):
-    print 'Begin %d Run through out of %d' (i, NUM_RUN_THOUGHS - 1)
+    print 'Begin %d Run through out of %d' % (i, NUM_RUN_THOUGHS - 1)
     gold_key = AddExamples(synthetic_graph)
     TestGraph(synthetic_graph, gold_key, ys_rnd)
     synthetic_graph = nx.read_edgelist('random_money_launder.edgelist', nodetype=int)
