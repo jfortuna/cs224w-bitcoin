@@ -14,6 +14,51 @@ _MID_WAY_HIGH_BOUND = 100
 _PROBABILITY_REPLACEMENT = .25
 
 
+def find_money_laundering(g):
+  g_cpy = g.copy()
+  ys = [0] * (_MID_WAY_HIGH_BOUND - _MID_WAY_LOW_BOUND + 1)
+  for i in range(_NUM_RUN_THOUGHS):
+    print 'Begin %d Run through out of %d' % (i, _NUM_RUN_THOUGHS - 1)
+    _find_instances(g, ys)
+    g = g_cpy
+  ys = [y / float(_NUM_RUN_THOUGHS) for y in ys]
+  _save_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
+  _plot_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
+
+def _plot_results(xs, ys):
+  fig = plt.figure(1)
+  p = fig.add_subplot(111)
+  plt.plot(xs, ys, 'b', linewidth=2.0)
+  p.set_title("Average Occurance of X Midway Nodes")
+  p.set_xlabel("Number of Midway Nodes")
+  p.set_ylabel("Average Occurace")
+  plt.show()
+
+def _find_instances(g, ys):
+  total = 0
+  for start in g.nodes():
+    for end in g.nodes():
+      if start == end:
+        continue
+      paths = simple_paths.all_simple_paths(g, start, end, cutoff=2)
+      paths = list(paths)
+      if not paths:
+        continue
+      midways = []
+      for path in paths:
+        midways.append(path[1])
+      if len(midways) >= _MID_WAY_LOW_BOUND:
+        ys[len(midways) - _MID_WAY_LOW_BOUND] += 1
+        total += 1
+  print 'found %s instances' % total
+
+def _save_result:
+  with open('slice.csv', 'wb') as csvfile:
+    freqwriter = csv.writer(csvfile)
+    for i in range(len(xs)):
+      freqwriter.writerow([xs[i], yrnd[i]])
+
+
 def money_laundering():
   synthetic_graph = nx.gnm_random_graph(_NODES, _EDGES, directed=True)
   nx.write_edgelist(synthetic_graph, 'random_money_launder.edgelist')
