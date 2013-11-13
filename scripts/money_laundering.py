@@ -14,14 +14,14 @@ _MID_WAY_HIGH_BOUND = 100
 _PROBABILITY_REPLACEMENT = .25
 
 
-def find_money_laundering(g):
+def find_money_laundering(g, run_throughs):
   g_cpy = g.copy()
   ys = [0] * (_MID_WAY_HIGH_BOUND - _MID_WAY_LOW_BOUND + 1)
-  for i in range(_NUM_RUN_THOUGHS):
-    print 'Begin %d Run through out of %d' % (i, _NUM_RUN_THOUGHS - 1)
+  for i in range(run_throughs):
+    print 'Begin %d Run through out of %d' % (i, run_throughs - 1)
     _find_instances(g, ys)
     g = g_cpy
-  ys = [y / float(_NUM_RUN_THOUGHS) for y in ys]
+  ys = [y / float(run_throughs) for y in ys]
   _save_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
   _plot_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
 
