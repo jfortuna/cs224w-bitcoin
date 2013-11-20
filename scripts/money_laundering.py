@@ -52,14 +52,17 @@ def _find_instances(g, ys):
         total += 1
   print 'found %s instances' % total
 
-def _save_result:
+def _save_result(xs, ys):
   with open('slice.csv', 'wb') as csvfile:
     freqwriter = csv.writer(csvfile)
     for i in range(len(xs)):
-      freqwriter.writerow([xs[i], yrnd[i]])
+      freqwriter.writerow([xs[i], ys[i]])
 
 
 def money_laundering():
+  """Performs a money laundering test on three different types
+     of graphs to test the validity of this method.
+  """
   synthetic_graph = nx.gnm_random_graph(_NODES, _EDGES, directed=True)
   nx.write_edgelist(synthetic_graph, 'random_money_launder.edgelist')
   ys_rnd = [0] * (_MID_WAY_HIGH_BOUND - _MID_WAY_LOW_BOUND + 1)
