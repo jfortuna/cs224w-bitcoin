@@ -84,6 +84,10 @@ def analyze_satoshi_dice():
     plt.show()
     '''
 
+    g_before.remove_edges_from(g_before.selfloop_edges())
+    g_after.remove_edges_from(g_after.selfloop_edges())
+    print len(graphtools.get_k_core_from_graph(g_before).nodes())
+    print len(graphtools.get_k_core_from_graph(g_after).nodes())
 
     #before_node_max_in = graphtools.get_node_max_in_degree(g_before)
     #after_node_max_in = graphtools.get_node_max_in_degree(g_after)
