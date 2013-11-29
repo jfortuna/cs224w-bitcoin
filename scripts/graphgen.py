@@ -8,7 +8,7 @@ def get_graph_slice(start, end):
     between start and end. Assumes you have bitcoin data in Bitoin
     folder. Check it.
     """
-    g_slice = nx.DiGraph()
+    g_slice = nx.MultiDiGraph()
 
     # If you are looking for more than a year's worth of data, just look
     # at the whole text file. 
@@ -17,7 +17,7 @@ def get_graph_slice(start, end):
             for line in fp:
                 vals = line.strip().split(',')
                 if len(vals) == 5:
-                    if vals[3] < start or vals[3] > end:
+                    if int(vals[3]) < start or int(vals[3]) > end:
                         continue
                     g_slice.add_edge(vals[1], vals[2], value=float(vals[4]), date=vals[3], transaction_key=int(vals[0]))
 

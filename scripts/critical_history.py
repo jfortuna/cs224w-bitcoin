@@ -84,10 +84,13 @@ def analyze_satoshi_dice():
     plt.show()
     '''
 
+    #Can't use k-core with MultiDiGraph
+    '''
     g_before.remove_edges_from(g_before.selfloop_edges())
     g_after.remove_edges_from(g_after.selfloop_edges())
     print len(graphtools.get_k_core_from_graph(g_before).nodes())
     print len(graphtools.get_k_core_from_graph(g_after).nodes())
+    '''
 
     #before_node_max_in = graphtools.get_node_max_in_degree(g_before)
     #after_node_max_in = graphtools.get_node_max_in_degree(g_after)
@@ -100,7 +103,6 @@ def analyze_satoshi_dice():
     #new_nodes = set(g_after.in_degree())-set(g_before.in_degree())
     #new_nodes_degrees = {k: g_after.in_degree()[k] for k in new_nodes}
     #print sorted(new_nodes_degrees.iteritems(), key=operator.itemgetter(1))
-    #TODO get lccs, nodes with largest in-degree, k-core possibly
 
 def analyze_silk_road():
     """
