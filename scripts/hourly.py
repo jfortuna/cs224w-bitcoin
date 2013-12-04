@@ -1,37 +1,4 @@
-import networkx as nx
-import itertools as it
-
-
-def get_graph_slice(start, end):
-    """
-    Generate a networkx digraph of the bitcoin data with all transactions
-    between start and end. Assumes you have bitcoin data in Bitoin
-    folder. Check it.
-    """
-    g_slice = nx.MultiDiGraph()
-
-    # If you are looking for more than a year's worth of data, just look
-    # at the whole text file. 
-    if end - start > 10000000000:
-        with open('../../Bitcoin/user_edges.txt') as fp:
-            for line in fp:
-                vals = line.strip().split(',')
-                if len(vals) == 5:
-                    if int(vals[3]) < start or int(vals[3]) > end:
-                        continue
-                    g_slice.add_edge(vals[1], vals[2], value=float(vals[4]), date=vals[3], transaction_key=int(vals[0]))
-
-    # Otherwise, look at a finer grained set of files with just the months requested
-    else:
-        for filename in _get_files(start, end):
-            with open(filename) as fp:
-                for line in fp:
-                    vals = line.strip().split(',')
-                    if len(vals) == 5:
-                        if int(vals[3]) < start or int(vals[3]) > end:
-                            continue
-                        g_slice.add_edge(vals[1], vals[2], value=float(vals[4]), date=vals[3], transaction_key=int(vals[0]))
-     return g_slice
+import matplotlib.pyplot as plt
 
 
 def _get_files(start, end):
@@ -40,20 +7,32 @@ def _get_files(start, end):
     the two given dates.
     """    
     start_index, end_index = _days.index(start / _HMS) , _days.index(end / _HMS)
-    return map(lambda day: _prefix + str(day), _days[start_index : end_index + 1])
+    return map(lambda day: str(day), _days[start_index : end_index + 1])
 
 
+def show_daily(start, end):
+    lines = []
+    for filename in _get_files(start, end):
+        with open(filename, 'r') as fp:
+            lines +=  fp.readlines()
+    lines = map(lambda x: (int(x.strip().split(',')[3]) / 10000) % 24, lines)
+    hours = list(set(lines))
+    d = dict([(hour, 0) for hour in hours])
+    d = reduce(_update, [d] + lines)
+    plt.plot(d.keys(), d.values())
+    plt.show()
 
-# Constant for removing the hours, minutes, and seconds from a date
+
+def _update(d, k):
+    d[k] += 1
+    return d
+
+
 _HMS = 1000000
-    
-    
-# This prefix is the location of the split user_edges data
-#_prefix = '../../Bitcoin/split/'
-_prefix = './'
 
 
-# The definition of good style. List of all calendar days with data
+
+
 _days = [20090103, 20090108, 20090109, 20090110, 20090111, 20090112,
     20090113, 20090114, 20090115, 20090116, 20090117, 20090118, 20090119,
     20090120, 20090121, 20090122, 20090123, 20090124, 20090125, 20090126,
