@@ -97,12 +97,30 @@ def analyze_satoshi_dice():
     #print before_node_max_in, after_node_max_in
     #print sorted(g_before.in_degree().iteritems(), key=operator.itemgetter(1))
     #print sorted(g_after.in_degree().iteritems(), key=operator.itemgetter(1))
-    #print g_after.edges('25', data=True)
+    #print len(g_after.edges('25', data=True))
     #print nx.get_edge_attributes(g_after, 'transaction_key')
     #print g_after.in_degree(after_node_max_in)
     #new_nodes = set(g_after.in_degree())-set(g_before.in_degree())
+    #print len(new_nodes)
     #new_nodes_degrees = {k: g_after.in_degree()[k] for k in new_nodes}
     #print sorted(new_nodes_degrees.iteritems(), key=operator.itemgetter(1))
+
+    time_period = graphgen._days[graphgen._days.index(_START_SATOSHI_DICE/graphgen._HMS):graphgen._days.index(_END_SATOSHI_DICE/graphgen._HMS)]
+    transactions_per_day = []
+    for day in time_period:
+        daystart = int(str(day) + '000000')
+        dayend = int(str(day) + '235959')
+        transactions = []
+        for n, nbrs in g_after.adjacency_iter():
+            for nbr, eattr in nbrs.items():
+                if (eattr['date'] >= daystart and eattr['date'] <= dayend):
+                    transactions.append(1)
+        #transactions = [edge for edge in g_after.edges_iter() if (edge['date'] >= daystart and edge['date'] <= dayend)]
+        transactions_per_day.append(len(transactions))
+    print time_period
+    print transactions_per_day
+    
+
 
 def analyze_silk_road():
     """
