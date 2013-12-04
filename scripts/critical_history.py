@@ -104,14 +104,6 @@ def analyze_satoshi_dice():
     #new_nodes_degrees = {k: g_after.in_degree()[k] for k in new_nodes}
     #print sorted(new_nodes_degrees.iteritems(), key=operator.itemgetter(1))
 
-def analyze_silk_road():
-    """
-    Analyzes the snippet of the bitcoin network around the time that
-    the silk road launched.
-    """
-    g = graphgen.get_graph_slice(_START_SILK_ROAD, _END_SILK_ROAD)
-
-
 
 """
   TODO: 
