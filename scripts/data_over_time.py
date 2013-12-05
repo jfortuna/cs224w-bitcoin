@@ -17,4 +17,3 @@ for start, end in slices:
   tags_over_time.user_transaction_frequency(g, str(start) + '_' + str(end))
   print 'finished %s tag over time' % i
   i += 1
-
