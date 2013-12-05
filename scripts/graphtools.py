@@ -1,5 +1,6 @@
 import graphgen
 import networkx as nx
+from datetime import datetime
 
 def get_wccs_from_graph(graph):
     return nx.weakly_connected_components(graph)
@@ -41,3 +42,9 @@ def get_out_degrees_from_dates(start, end):
 
 def get_k_core_from_graph(graph):
     return nx.k_core(graph)
+
+def string_to_datetime(string):
+    if len(string) == 14:
+        return datetime.strptime(string, "%Y%m%d%H%M%S")
+    else:
+        return datetime.strptime(string, "%Y%m%d")

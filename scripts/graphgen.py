@@ -31,7 +31,7 @@ def get_graph_slice(start, end):
                         if int(vals[3]) < start or int(vals[3]) > end:
                             continue
                         g_slice.add_edge(vals[1], vals[2], value=float(vals[4]), date=vals[3], transaction_key=int(vals[0]))
-     return g_slice
+    return g_slice
 
 
 def _get_files(start, end):
@@ -49,8 +49,8 @@ _HMS = 1000000
     
     
 # This prefix is the location of the split user_edges data
-#_prefix = '../../Bitcoin/split/'
-_prefix = './'
+_prefix = '../../Bitcoin/split/'
+#_prefix = './'
 
 
 # The definition of good style. List of all calendar days with data

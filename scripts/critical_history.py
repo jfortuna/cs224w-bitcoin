@@ -2,6 +2,7 @@ import graphgen
 import graphtools
 import networkx as nx
 from networkx.algorithms import simple_paths
+import matplotlib
 import matplotlib.pyplot as plt
 import operator
 
@@ -108,18 +109,25 @@ def analyze_satoshi_dice():
     time_period = graphgen._days[graphgen._days.index(_START_SATOSHI_DICE/graphgen._HMS):graphgen._days.index(_END_SATOSHI_DICE/graphgen._HMS)]
     transactions_per_day = []
     for day in time_period:
-        daystart = int(str(day) + '000000')
-        dayend = int(str(day) + '235959')
+        daystart = graphtools.string_to_datetime(str(day) + '000000')
+        dayend = graphtools.string_to_datetime(str(day) + '235959')
         transactions = []
         for n, nbrs in g_after.adjacency_iter():
-            for nbr, eattr in nbrs.items():
-                if (eattr['date'] >= daystart and eattr['date'] <= dayend):
-                    transactions.append(1)
-        #transactions = [edge for edge in g_after.edges_iter() if (edge['date'] >= daystart and edge['date'] <= dayend)]
+            for nbr, edict in nbrs.items():
+                for eattr in edict.values():
+                    timestamp = graphtools.string_to_datetime(eattr['date'])
+                    if (timestamp >= daystart and timestamp <= dayend):
+                        transactions.append(1)
         transactions_per_day.append(len(transactions))
     print time_period
     print transactions_per_day
-    
+    time_period = [graphtools.string_to_datetime(str(time)) for time in time_period]
+    dates = matplotlib.dates.date2num(time_period)
+    plt.plot(time_period, transactions_per_day, 'b-')
+    plt.xlabel('Date')
+    plt.ylabel('Number of transactions')
+    plt.title('Number of transactions 1 week before and after SatoshiDICE announced')
+    plt.show()
 
 
 def analyze_silk_road():
