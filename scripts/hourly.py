@@ -10,10 +10,13 @@ def _get_files(start, end):
     return map(lambda day: str(day), _days[start_index : end_index + 1])
 
 
-def show_daily(start, end):
+def show_hourly(start, end):
+    """
+    Show a plot for the number of transactions per hour.
+    """
     lines = []
     for filename in _get_files(start, end):
-        with open(filename, 'r') as fp:
+        with open(_prefix + filename, 'r') as fp:
             lines +=  fp.readlines()
     lines = map(lambda x: (int(x.strip().split(',')[3]) / 10000) % 24, lines)
     hours = list(set(lines))
@@ -24,13 +27,19 @@ def show_daily(start, end):
 
 
 def _update(d, k):
+    """
+    One-off function for counting keys using reduce
+    """
     d[k] += 1
     return d
 
-
+    
+# Constant for removing the hours, minutes, and seconds from a date
 _HMS = 1000000
 
 
+# This prefix is the location of the split user_edges data
+_prefix = '../../Bitcoin/split/'
 
 
 _days = [20090103, 20090108, 20090109, 20090110, 20090111, 20090112,
