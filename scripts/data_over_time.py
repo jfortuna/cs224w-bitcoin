@@ -1,10 +1,11 @@
 """ The purpose of this file is to aggregate data from the bitcoin network
     over time
 """
+import sys
+
 import networkx as nx 
-from utils import graph_gen_utils
-from scripts import graphgen
-from models import tags_over_time
+import graphgen
+import tags_over_time
 
 _HMS = 1000000
 
