@@ -29,7 +29,8 @@ def user_transaction_frequency(g, stamp=''):
     node_to_freq[node] = freq
 
   save_node_data.save_node_map(node_to_freq, 'node_transaction_freq_'+stamp)
-  plot_node_data.plot_node_map(node_to_freq)
+  # plot_node_data.plot_node_map(node_to_freq)
+  return frequency
 
 
 def user_sell_frequency(g, stamp=''):
