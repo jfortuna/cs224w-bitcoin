@@ -10,7 +10,7 @@ import tags_over_time
 _HMS = 1000000
 
 
-slices = graph_gen_utils.generate_time_slices(num_intervals=10, num_in_slice=1)
+slices = graphgen.generate_time_slices(num_intervals=10, num_in_slice=1)
 i = 0
 for start, end in slices:
   g = graphgen.get_graph_slice(start * _HMS, end * _HMS)
