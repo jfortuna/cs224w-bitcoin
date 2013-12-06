@@ -10,8 +10,6 @@ import tags_over_time
 from networkx.algorithms import *
 
 _HMS = 1000000
-
-
 slices = graphgen.generate_time_slices(slice_time=5, num_intervals=50, num_in_slice=10)
 i = 0
 deg_connectivity = []

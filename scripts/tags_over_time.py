@@ -78,8 +78,8 @@ def user_transaction_amount(g, stamp=''):
   node_to_amount = {}
   for node in g.nodes():
     total = 0.0
-    for e in g.edges(node, data=True):
-      total += e['amount']
+    for s, e, d in g.edges(node, data=True):
+      total += d['amount']
     node_to_amount[node] = total
     rounded = int(total * _ROUND_FACTOR) / float(_ROUND_FACTOR)
     amount_frequency[rounded] = amount_frequency[rounded] + 1 if \
