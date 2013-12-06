@@ -28,6 +28,7 @@ def user_transaction_frequency(g, stamp=''):
     node_to_freq[node] = freq
 
   utils.save_node_map(node_to_freq, 'node_transaction_freq_'+stamp)
+  utils.save_node_map(frequency, 'freq_to_transaction_'+stamp)
   # plot_node_data.plot_node_map(node_to_freq)
   return frequency
 
@@ -58,11 +59,12 @@ def user_buy_frequency(g, stamp=''):
     node_to_freq[node] = freq
 
   utils.save_node_data.save_node_map(node_to_freq, 'node_buy_freq_'+stamp)
+  utils.save_node_map(frequency, 'freq_to_buy_'+stamp)
   # plot_node_data.plot_node_map(node_to_freq)
 
 
 
-_ROUND_FACTOR = 100 #bitcoin amounts are small, so multiply by a factor, cast to an
+_ROUND_FACTOR = 10000000 #bitcoin amounts are small, so multiply by a factor, cast to an
                     #int, and then divide
 def user_transaction_amount(g, stamp=''):
   """Takes in a graph representing a snippet of the bitcoin network
@@ -83,7 +85,8 @@ def user_transaction_amount(g, stamp=''):
     amount_frequency[rounded] = amount_frequency[rounded] + 1 if \
         amount_frequency.get(rounded) else 1
   utils.save_node_data.save_node_map(node_to_amount, 'node_transaction_amount_'+stamp)
-  plot_node_data.plot_node_map(node_to_amount)
+  utils.save_node_map(amount_frequency, 'amount_to_frequency_'+stamp)
+  # plot_node_data.plot_node_map(node_to_amount)
 
 
 
