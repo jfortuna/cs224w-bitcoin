@@ -8,8 +8,7 @@ import sys
 import networkx as nx
 from networkx.algorithms import simple_paths
 from matplotlib import pyplot as plt
-# from utils import save_node_data
-import csv
+import utils
 
 
 
@@ -28,7 +27,7 @@ def user_transaction_frequency(g, stamp=''):
     frequency[freq] = frequency[freq] + 1 if frequency.get(freq) else 1
     node_to_freq[node] = freq
 
-  save_node_data.save_node_map(node_to_freq, 'node_transaction_freq_'+stamp)
+  utils.save_node_map(node_to_freq, 'node_transaction_freq_'+stamp)
   # plot_node_data.plot_node_map(node_to_freq)
   return frequency
 
@@ -44,8 +43,8 @@ def user_sell_frequency(g, stamp=''):
     frequency[freq] = frequency[freq] + 1 if frequency.get(freq) else 1
     node_to_freq[node] = freq
 
-  save_node_data.save_node_map(node_to_freq, 'node_sell_freq_'+stamp)
-  plot_node_data.plot_node_map(node_to_freq)
+  utils.save_node_data.save_node_map(node_to_freq, 'node_sell_freq_'+stamp)
+  # plot_node_data.plot_node_map(node_to_freq)
 
 def user_buy_frequency(g, stamp=''):
   """Same as first method, but now for the frequency in which a user spends
@@ -58,8 +57,8 @@ def user_buy_frequency(g, stamp=''):
     frequency[freq] = frequency[freq] + 1 if frequency.get(freq) else 1
     node_to_freq[node] = freq
 
-  save_node_data.save_node_map(node_to_freq, 'node_buy_freq_'+stamp)
-  plot_node_data.plot_node_map(node_to_freq)
+  utils.save_node_data.save_node_map(node_to_freq, 'node_buy_freq_'+stamp)
+  # plot_node_data.plot_node_map(node_to_freq)
 
 
 
@@ -83,19 +82,9 @@ def user_transaction_amount(g, stamp=''):
     rounded = int(total * _ROUND_FACTOR) / float(_ROUND_FACTOR)
     amount_frequency[rounded] = amount_frequency[rounded] + 1 if \
         amount_frequency.get(rounded) else 1
-  save_node_data.save_node_map(node_to_amount, 'node_transaction_amount_'+stamp)
+  utils.save_node_data.save_node_map(node_to_amount, 'node_transaction_amount_'+stamp)
   plot_node_data.plot_node_map(node_to_amount)
 
-
-import csv
-def save_node_map(mp, stamp):
-    """Saves data about the nodes to a csv. Note that this assumes
-    the key is a node. Stamp is the name of the csv.
-    """
-    with open('../csv_data/'+stamp, 'wb') as csvfile:
-        writer = csv.writer(csvfile)
-        for key, value in mp.items():
-            writer.writerow([key, value])
 
 
 
