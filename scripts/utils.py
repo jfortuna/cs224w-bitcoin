@@ -10,4 +10,11 @@ def save_node_map(mp, stamp):
         for key, value in mp.items():
             writer.writerow([key, value])
 
-def graph_node_data(xs, ys, title=''):
+
+def save_lists(start_dates, ys):
+   with open('../csv_data/'+stamp, 'wb') as csvfile:
+       writer = csv.writer(csvfile)
+       for x,y in zip(start_dates, ys):
+           writer.writerow([x, y])
+
+
