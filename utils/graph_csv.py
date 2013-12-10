@@ -22,12 +22,12 @@ def _plot_vals_from_time_slices(prefix, title, ylable):
   to_graph = {}
   for filename in files:
     if filename.startswith(prefix):
-      if filename[0:1].isdigit():
-        # start, end = _extract_start_and_end(filename[len(prefix) + 1:])
-        start, end = _extract_start_and_end(filename)
-        vals = _get_vals_from_csv(filename)
-        graphtools.calc_gini(vals)
-        to_graph[start] = graphtools.calc_gini(vals)
+      # if filename[0:1].isdigit():
+      start, end = _extract_start_and_end(filename[len(prefix) + 1:])
+      # start, end = _extract_start_and_end(filename)
+      vals = _get_vals_from_csv(filename)
+      graphtools.calc_gini(vals)
+      to_graph[start] = graphtools.calc_gini(vals)
   plot.plot_frequency_map(to_graph, title=title, ylabel=ylabel, xlabel='Date', show=True)
 
 def _extract_start_and_end(start_and_end):
@@ -41,10 +41,10 @@ def _get_vals_from_csv(filename):
   return data.values()
 
 if __name__ == '__main__':
-  to_plot = '../csv_data/' + sys.argv[1]
-  name = sys.argv[2]
-  ylabel = sys.argv[3]
-  _plot_vals_from_list(to_plot, name, ylabel)
-  # ylabel = 'Gini Value for ' + sys.argv[3]
-  # _plot_vals_from_time_slices(sys.argv[1], sys.argv[2], ylabel)
-  
+  # to_plot = '../csv_data/' + sys.argv[1]
+  # name = sys.argv[2]
+  # ylabel = sys.argv[3]
+  # _plot_vals_from_list(to_plot, name, ylabel)
+  ylabel = 'Gini Value for ' + sys.argv[3]
+  _plot_vals_from_time_slices(sys.argv[1], sys.argv[2], ylabel)
+
