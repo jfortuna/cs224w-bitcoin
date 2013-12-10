@@ -36,7 +36,7 @@ def _find_instances(g, ys, margin, ins, outs):
   ends = []
   
   for start in g.nodes():
-    print 'finished a start node'
+    #print 'finished a start node'
     for end in g.nodes():
       if start == end:
         continue
@@ -77,7 +77,7 @@ def _verify_path(g, s, e, midways, margin):
     
     if out_sum / float(in_sum) <= margin:
       return True
-    print 'found a structure, but ignoring'
+    #print 'found a structure, but ignoring'
   return False
 
 def _save_result(xs, ys):
