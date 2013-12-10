@@ -53,27 +53,14 @@ def get_graph_slice(start, end):
     """
     g_slice = nx.MultiDiGraph()
 
-    # If you are looking for more than a year's worth of data, just look
-    # at the whole text file. 
-    if end - start > 10000000000:
-        with open('../../Bitcoin/user_edges.txt') as fp:
+    for filename in _get_files(start, end):
+        with open(filename) as fp:
             for line in fp:
                 vals = line.strip().split(',')
                 if len(vals) == 5:
                     if int(vals[3]) < start or int(vals[3]) > end:
                         continue
                     g_slice.add_edge(vals[1], vals[2], value=float(vals[4]), date=vals[3], transaction_key=int(vals[0]))
-
-    # Otherwise, look at a finer grained set of files with just the months requested
-    else:
-        for filename in _get_files(start, end):
-            with open(filename) as fp:
-                for line in fp:
-                    vals = line.strip().split(',')
-                    if len(vals) == 5:
-                        if int(vals[3]) < start or int(vals[3]) > end:
-                            continue
-                        g_slice.add_edge(vals[1], vals[2], value=float(vals[4]), date=vals[3], transaction_key=int(vals[0]))
     return g_slice
 
 
