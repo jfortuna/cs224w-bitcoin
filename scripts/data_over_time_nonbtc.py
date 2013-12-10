@@ -7,7 +7,7 @@ import networkx as nx
 import graphgen
 import graphtools
 import tags_over_time
-import forest_fire as ff
+import forest_fire
 from networkx.algorithms import *
 '''
 _HMS = 1000000
@@ -85,7 +85,7 @@ for start, end in slices:
     g = graphgen.get_graph_slice(start * _HMS, end * _HMS)
     if len(g) == 0:
         continue
-    ff = ff.forest_fire(g.number_of_nodes(), p, r)
+    ff = forest_fire.gen_forest_fire(g.number_of_nodes(), p, r)
     stamp = str(start) + '_' + str(end)
     
     tags_over_time.user_transaction_frequency(ff, 'ff_' + stamp)
