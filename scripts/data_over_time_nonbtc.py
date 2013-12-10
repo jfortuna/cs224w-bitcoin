@@ -25,17 +25,17 @@ for start, end in slices:
   g = graphgen.get_graph_slice(start * _HMS, end * _HMS)
   if len(g) == 0:
     continue
-  rg = nx.gnm_random_graph(g.number_of_nodes(), g.number_of_edges())
-  pfg = nx.barabasi_albert_graph(g.number_of_nodes(), g.number_of_edges())
+  rg = nx.gnm_random_graph(g.number_of_nodes(), g.number_of_edges(), directed=True)
+  pfg = nx.barabasi_albert_graph(g.number_of_nodes(), g.number_of_edges()/g.number_of_nodes())
   stamp = str(start) + '_' + str(end)
   
   tags_over_time.user_transaction_frequency(pfg, 'pfg_' + stamp)
-  tags_over_time.user_transaction_amount(pfg, 'pfg_' + stamp)
-  tags_over_time.user_buy_frequency(pfg, 'pfg_' + stamp)
-  tags_over_time.user_sell_frequency(pfg, 'pfg_' + stamp)
+ # tags_over_time.user_transaction_amount(pfg, 'pfg_' + stamp)
+  #tags_over_time.user_buy_frequency(pfg, 'pfg_' + stamp)
+  #tags_over_time.user_sell_frequency(pfg, 'pfg_' + stamp)
 
   tags_over_time.user_transaction_frequency(rg, 'rg_' + stamp)
-  tags_over_time.user_transaction_amount(rg, 'rg_' + stamp)
+  #tags_over_time.user_transaction_amount(rg, 'rg_' + stamp)
   tags_over_time.user_buy_frequency(rg, 'rg_' + stamp)
   tags_over_time.user_sell_frequency(rg, 'rg_' + stamp)
   

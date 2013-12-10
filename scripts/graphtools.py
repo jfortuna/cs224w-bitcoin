@@ -5,8 +5,10 @@ from scipy.interpolate import interp1d
 from datetime import datetime
 
 def get_wccs_from_graph(graph):
-    return nx.weakly_connected_components(graph)
-
+    if graph.is_directed():
+      return nx.weakly_connected_components(graph)
+    else:
+      return nx.connected_components(graph)
 
 def get_wccs_from_dates(start, end):
     g_slice = graphgen.get_graph_slice(start, end)
