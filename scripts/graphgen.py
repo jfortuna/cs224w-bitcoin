@@ -5,6 +5,42 @@ import random
 import graphtools
 import numpy as np
 
+_START_ACTIVITY = 20110401
+
+def generate_weighted_time_slices():
+    slices = []
+    early = _days[:_days.index(20110401)]
+    section = len(early) / 24
+    low = 0
+    high = section
+    for i in range(23):
+        valid_days = early[low:high]
+        if not valid_days:
+	  continue
+	start = random.choice(valid_days)
+        next_index = valid_days.index(start)+5
+        end = valid_days[valid_days.index(start)+5] if len(valid_days) -1 >= next_index  else valid_days[-1]
+        slices.append((start, end))
+        low += section
+        high += section
+    rest = _days[_days.index(20110401):]
+    section = len(rest) / 151
+    low = 0
+    high = section
+    for i in range(150):
+        valid_days = rest[low:high]
+        if not valid_days:
+	  continue
+	start = random.choice(valid_days)
+	next_index = valid_days.index(start)+5
+        end = valid_days[valid_days.index(start)+5] if len(valid_days) -1 >= next_index  else valid_days[-1]
+        slices.append((start, end))
+        low += section
+        high += section
+    return slices
+
+
+
 def generate_time_slices(slice_time=1, num_intervals=10, num_in_slice=10):
   """ Returns a list of tuples that represent time slices from the
       graph.
@@ -53,28 +89,27 @@ def get_graph_slice(start, end):
     """
     g_slice = nx.MultiDiGraph()
 
-    # If you are looking for more than a year's worth of data, just look
-    # at the whole text file. 
-    if end - start > 10000000000:
-        with open('../../Bitcoin/user_edges.txt') as fp:
+    for filename in _get_files(start, end):
+        with open(filename) as fp:
             for line in fp:
                 vals = line.strip().split(',')
                 if len(vals) == 5:
                     if int(vals[3]) < start or int(vals[3]) > end:
                         continue
                     g_slice.add_edge(vals[1], vals[2], value=float(vals[4]), date=vals[3], transaction_key=int(vals[0]))
-
-    # Otherwise, look at a finer grained set of files with just the months requested
-    else:
-        for filename in _get_files(start, end):
-            with open(filename) as fp:
-                for line in fp:
-                    vals = line.strip().split(',')
-                    if len(vals) == 5:
-                        if int(vals[3]) < start or int(vals[3]) > end:
-                            continue
-                        g_slice.add_edge(vals[1], vals[2], value=float(vals[4]), date=vals[3], transaction_key=int(vals[0]))
     return g_slice
+
+
+def add_slice_to_graph(graph, start, end):
+    for filename in _get_files(start, end):
+        with open(filename) as fp:
+            for line in fp:
+                vals = line.strip().split(',')
+                if len(vals) == 5:
+                    if int(vals[3]) < start or int(vals[3]) > end:
+                        continue
+                    graph.add_edge(vals[1], vals[2], value=float(vals[4]), date=vals[3], transaction_key=int(vals[0]))
+    return graph
 
 
 def _get_files(start, end):

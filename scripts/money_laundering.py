@@ -3,9 +3,14 @@ import sys
 import networkx as nx
 from networkx.algorithms import simple_paths
 from matplotlib import pyplot as plt
+import graphgen
+import graphtools
+import plot
 
+_MID_WAY_HIGH_BOUND = 500
+_MID_WAY_LOW_BOUND = 10
 
-def find_one_many_one(g, money_margin):
+def find_one_many_one(g, margin):
   """ Finds one to many to one instances. First the algorithm identifies
       all structures that match one to many to one structure. Then it 
       ensures that the transaction from start to finish is within an
@@ -15,49 +20,65 @@ def find_one_many_one(g, money_margin):
       that ranges from 3 days to one week.
   """
   ys = [0] * (_MID_WAY_HIGH_BOUND - _MID_WAY_LOW_BOUND + 1)
-  starts, ends = _find_instances(g, ys, margin)
-  _save_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
-  _save_nodes(starts, ends)
+  ins, outs = _build_dict_sets(g)
+  starts, ends, total = _find_instances(g, ys, margin, ins, outs)
+ # _save_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
   _plot_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
+  for s, e in zip(starts, ends):
+    print '%s, %s' % (s, e)
+ # _save_nodes(starts, ends)
+  _plot_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
+  return total
 
-def _find_instances(g, ys, margin):
+def _find_instances(g, ys, margin, ins, outs):
   total = 0
   starts = []
   ends = []
+  
   for start in g.nodes():
+    print 'finished a start node'
     for end in g.nodes():
       if start == end:
         continue
-      paths = simple_paths.all_simple_paths(g, start, end, cutoff=2)
-      paths = list(paths)
-      if not paths:
+      midways = ins[end].intersection(outs[start])
+      if not midways:
         continue
-      success, midway = _verify_path(g, paths, margin)
-      if success:
-        ys[midway - _MID_WAY_LOW_BOUND] += 1
-        starts.append(start)
-        ends.append(end)
+      if _verify_path(g, start, end, midways, margin):
+        ys[len(midways)] += 1
+        # starts.append(start)
+        # ends.append(end)
         total += 1
-  return starts, ends
+  return starts, ends, total
 
-def _verify_path(g, paths, margin):
+def _build_dict_sets(g):
+  outs = {}
+  ins = {}
+  for n in g.nodes():
+    ins[n] = set(g.predecessors(n))
+    outs[n] = set(g.successors(n))
+  return ins, outs
+
+
+def _verify_path(g, s, e, midways, margin):
   """ Verifying paths requires checking that the money that
       passed into the midways approximately equals the money
       that went into the final location.
   """
   in_sum = 0.0
   out_sum = 0.0
-  num_midway = 0
-  for path in paths:
-    in_sum += g[path[0]][path[1]]['value']
-    out_sum += g[path[1]][path[2]]['value']
-    num_midway += 1
 
-  if num_midway >= _MID_WAY_LOW_BOUND:
+  if len(midways) >= _MID_WAY_LOW_BOUND:
+    
+    for m in midways:
+      for k in g[s][m]:
+	in_sum += g[s][m][k]['value']
+      for k in g[m][e]:
+        out_sum += g[m][e][k]['value']
+    
     if out_sum / float(in_sum) <= margin:
-      return True, num_midway
+      return True
     print 'found a structure, but ignoring'
-  return False, _
+  return False
 
 def _save_result(xs, ys):
   with open('slice_ml.csv', 'wb') as csvfile:
@@ -74,10 +95,22 @@ def _save_nodes(starts, ends):
 def _plot_result(xs, ys):
   fig = plt.figure(1)
   p = fig.add_subplot(111)
-  plt.plot(xs, ys, 'b', linewidth=2.0)
-  p.set_title("Average Occurance of X Midway Nodes")
+  p.bar(xs, ys)
+  p.set_title("Occurance of X Midway Nodes")
   p.set_xlabel("Number of Midway Nodes")
-  p.set_ylabel("Average Occurace")
+  p.set_ylabel("Occurance")
   plt.show()
 
+
+if __name__ == '__main__':
+  days = graphgen._days[graphgen._days.index(20110401):]
+  # totals = {}
+  start = random.choice(days)
+  next_index = days.index(start) + 10
+  end = days[next_index] if len(days) -1 >= next_index  else days[-1]
+  vals = find_one_many_one(graphgen.get_graph_slice(start * graphgen._HMS, end * graphgen._HMS), .04)
+  # totals[start] = vals
+ 
+  # plot.plot_frequency_map(totals, title='Money Laundering Instances Over Time',
+  #     xlabel='Date', ylabel='Money Laundering Instances', show=True)
 
