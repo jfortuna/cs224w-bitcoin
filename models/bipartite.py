@@ -26,6 +26,7 @@ def assemble_actors_and_societies(g, ratio):
       B.add_edge(n1,n2)
   return B
 
+  
 def sim_rank_analysis(g, c=.6, k=5):
   """ Performs sim rank analysis on the given graph.
   """
