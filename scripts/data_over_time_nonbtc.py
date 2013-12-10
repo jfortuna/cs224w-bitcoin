@@ -9,6 +9,7 @@ import graphtools
 import tags_over_time
 import forest_fire
 from networkx.algorithms import *
+from model import *
 '''
 _HMS = 1000000
 slices = graphgen.generate_weighted_time_slices()
@@ -66,9 +67,41 @@ utils.save_lists(dates, lccs_p, stamp='pfg_lccs')
 # plot single values over time
 # Gini coefficient (way to get single number from distribution)
 '''
+_HMS = graphgen._HMS
+slices = graphgen.generate_weighted_time_slices()
+i = 0
+dates = []
+avg_clust = []
+lccs = []
+largest_scc = []
+
+for start, end in slices:
+    g = cv_from_btc(start * _HMS, end * _HMS)
+    if len(g) == 0:
+        continue
+    stamp = str(start) + '_' + str(end)
+    
+    tags_over_time.user_transaction_frequency(g, 'model_' + stamp)
+    tags_over_time.user_buy_frequency(g, 'model_' + stamp)
+    tags_over_time.user_sell_frequency(g, 'model_' + stamp)
+  
+    undir_g = nx.Graph(g.copy())
+    avg_clust.append(nx.average_clustering(undir_g))
+    lccs.append(len(graphtools.get_lcc_from_graph(g)))
+    largest_scc.append(len(graphtools.get_sccs_from_graph(g)[0]))
+    
+    dates.append(start) # hack for now to save time...
+    
+    print 'finished %s tag over time' % i
+    i += 1
+
+utils.save_lists(dates, avg_clust, stamp='model_avg_clust')
+utils.save_lists(dates, lccs, stamp='model_lccs')
+utils.save_lists(dates, largest_scc, stamp='model_largest_scc')
 
 
 
+'''
 _HMS = graphgen._HMS
 slices = graphgen.generate_weighted_time_slices()
 i = 0
@@ -105,4 +138,5 @@ for start, end in slices:
 utils.save_lists(dates, avg_clust, stamp='ff_avg_clust')
 utils.save_lists(dates, lccs, stamp='ff_lccs')
 utils.save_lists(dates, largest_scc, stamp='ff_largest_scc')
+'''
 

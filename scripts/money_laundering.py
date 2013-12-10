@@ -1,11 +1,11 @@
 import random
 import sys
 import networkx as nx
-from networkx.algorithms import simple_paths
 from matplotlib import pyplot as plt
 import graphgen
 import graphtools
 import plot
+from model import *
 
 _MID_WAY_HIGH_BOUND = 500
 _MID_WAY_LOW_BOUND = 10
@@ -36,7 +36,6 @@ def _find_instances(g, ys, margin, ins, outs):
   ends = []
   
   for start in g.nodes():
-    print 'finished a start node'
     for end in g.nodes():
       if start == end:
         continue
@@ -87,7 +86,7 @@ def _save_result(xs, ys):
       freqwriter.writerow([xs[i], ys[i]])
 
 def _save_nodes(starts, ends):
-  with open('ml_nodes.csv', 'wb') as csvfile:
+  with open('ml_model_nodes.csv', 'wb') as csvfile:
     writer = csv.writer(csvfile)
     for s, e in zip(starts, ends):
       writer.writerow([s, e])
@@ -96,7 +95,7 @@ def _plot_result(xs, ys):
   fig = plt.figure(1)
   p = fig.add_subplot(111)
   p.bar(xs, ys)
-  p.set_title("Occurance of X Midway Nodes")
+  p.set_title("Occurance of X Midway Nodes in Modeled Network")
   p.set_xlabel("Number of Midway Nodes")
   p.set_ylabel("Occurance")
   plt.show()
@@ -108,7 +107,7 @@ if __name__ == '__main__':
   start = random.choice(days)
   next_index = days.index(start) + 10
   end = days[next_index] if len(days) -1 >= next_index  else days[-1]
-  vals = find_one_many_one(graphgen.get_graph_slice(start * graphgen._HMS, end * graphgen._HMS), .04)
+  vals = find_one_many_one(cv_to_btc(start * graphgen._HMS, end * graphgen._HMS), .04)
   # totals[start] = vals
  
   # plot.plot_frequency_map(totals, title='Money Laundering Instances Over Time',
