@@ -3,6 +3,8 @@ This file is for generic plotting
 """
 
 import matplotlib.pyplot as plt
+import matplotlib
+from scripts import graphtools
 
 
 def plot_frequency_map(*maps, **plotargs):
@@ -32,7 +34,9 @@ def plot_frequency_map(*maps, **plotargs):
     for mp in maps:
         xs =  sorted(mp.keys())
         ys = [mp[k] for k in xs]
-        plt.plot(xs,ys)
+        time_period = [graphtools.string_to_datetime(str(time)) for time in xs]
+        dates = matplotlib.dates.date2num(time_period)
+        plt.plot(time_period,ys)
 
     # look through kwargs, set appropriate plot features
     if 'xlabel' in plotargs:
