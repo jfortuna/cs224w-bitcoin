@@ -75,7 +75,7 @@ def get_num_nodes_edges_from_dates(start, end):
 
 
 def get_frac_nodes_in_gcc_from_graph(g_slice):
-    nodes_in_gcc = len(nx.weakly_connected_components(g_slice)[0])
+    nodes_in_gcc = len(get_wccs_from_graph(g_slice)[0])
     return float(nodes_in_gcc) / g_slice.number_of_nodes()
 
 
