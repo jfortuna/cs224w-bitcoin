@@ -23,6 +23,9 @@ def find_one_many_one(g, margin):
   ins, outs = _build_dict_sets(g)
   starts, ends, total = _find_instances(g, ys, margin, ins, outs)
  # _save_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
+  _plot_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
+  for s, e in zip(starts, ends):
+    print '%s, %s' % (s, e)
  # _save_nodes(starts, ends)
   _plot_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
   return total
