@@ -24,10 +24,10 @@ def generate_weighted_time_slices():
         low += section
         high += section
     rest = _days[_days.index(20110401):]
-    section = len(rest) / 151
+    section = len(rest) / 101
     low = 0
     high = section
-    for i in range(150):
+    for i in range(100):
         valid_days = rest[low:high]
         if not valid_days:
 	  continue
