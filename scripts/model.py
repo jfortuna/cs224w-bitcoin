@@ -1,13 +1,18 @@
 import networkx as nx
 import numpy as np
 import scipy.stats as sts
+import random
 
 from numpy.random import *
-from scripts.graphgen import *
-from scripts.graphtools import *
+from graphgen import *
+from graphtools import *
 from math import log
 
 def cv_from_btc(start, end):
+    """
+    Give it a start and an end time, and it randomly generates a cv-graph
+    to match that time slice
+    """
     g = get_graph_slice(start, end)
     v = len(g) / 100
     c = len(g) - v
@@ -16,12 +21,12 @@ def cv_from_btc(start, end):
     rate = float(len(g.edges())) / (c * duration)
     powerlaw = 1 + len(g) / sum(map(lambda x: log(x), g.degree().values()))
     std = np.std(map(lambda e: e[2]['value'] / 2, g.edges(data=True)))
-    return consumer_vendor_graph(c, v, purchase_rate=rate, pop_exp=powerlaw, menu_variance=std**2, duration=duration)
+    return g,consumer_vendor_graph(c, v, purchase_rate=1.0/rate, pop_exp=powerlaw, menu_variance=std**2, duration=duration)
+
 
 def sample_powerlaw(alpha):
-    u = random()
-    return u**(1.0/(1-alpha))
-    
+    u = random.random()
+    return u**(1.0/(1-alpha))    
 
 def fit_powerlaw(vals):
     max_val = max(vals)
@@ -63,8 +68,7 @@ def consumer_vendor_graph(c, v, purchase_rate=3, pop_exp=1, menu_variance=1, dur
         duration = 604800
 
     # Map from vendor to popularity
-    vend_pop = dict([(i, power(pop_exp)) for i in range(v)])
-    vend_menu = dict([(i, normal(scale=np.sqrt(menu_variance))) for i in range(v)])
+    vend_pop = dict([(i, sample_powerlaw(pop_exp)) for i in range(v)])
     
     # Map from consumer to the number of purchases they make
     cons = dict([(i, _transaction_times(purchase_rate, duration)) for i in range(v, c + v)])
