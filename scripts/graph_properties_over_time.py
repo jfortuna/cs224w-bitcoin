@@ -63,10 +63,10 @@ def effective_diameter_over_time():
         start = int(str(end_day) + "000000")
         end = int(str(end_day) + "235959")
         graph = graphgen.add_slice_to_graph(graph, start, end)
-        effective_diam = graphtools.get_diameter_from_graph(graph)
+        effective_diam = graphtools.effective_diameter(graph)
         effective_diameters[end_day] = effective_diam
         print end_day, effective_diam
-    utils.save_node_map(effective_diameters, ("diameters"))
+    utils.save_node_map(effective_diameters, ("effective_diameters"))
 
 
 def main(args):

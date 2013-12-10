@@ -115,6 +115,22 @@ def calc_gini(x):
 
 
 def effective_diameter(graph, q=0.9):
+    if graph.number_of_edges() == 0:
+        return 0
+
+    P = nx.floyd_warshall_numpy(graph)
+    P[np.diag_indices(P.shape[0])] = np.inf
+    paths = np.sort(P[P != np.inf])
+    if paths.shape[0] != 0:
+        ind = np.floor((paths.shape[0]-1)*q)
+        if paths[ind].size == 0:
+            return 0
+        else:
+            return np.mean(paths[ind])
+    else:
+        return 0
+
+    '''
     nodes = graph.nodes()
     dist = nx.shortest_path_length(graph)
     distances = []
@@ -145,3 +161,4 @@ def effective_diameter(graph, q=0.9):
     else:
         eff_d = 0
     return float(eff_d) / len(nodes)
+    '''
