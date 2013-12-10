@@ -1,19 +1,50 @@
 import networkx as nx
 import numpy as np
+import scipy.stats as sts
 
 from numpy.random import *
+from scripts.graphgen import *
+from scripts.graphtools import *
+from math import log
 
+def cv_from_btc(start, end):
+    g = get_graph_slice(start, end)
+    v = len(g) / 100
+    c = len(g) - v
+    s2d = lambda t: string_to_datetime(str(t))
+    duration = (s2d(end) - s2d(start)).total_seconds()
+    rate = float(len(g.edges())) / (c * duration)
+    powerlaw = 1 + len(g) / sum(map(lambda x: log(x), g.degree().values()))
+    std = np.std(map(lambda e: e[2]['value'] / 2, g.edges(data=True)))
+    return consumer_vendor_graph(c, v, purchase_rate=rate, pop_exp=powerlaw, menu_variance=std**2, duration=duration)
+
+def sample_powerlaw(alpha):
+    u = random()
+    return u**(1.0/(1-alpha))
+    
+
+def fit_powerlaw(vals):
+    max_val = max(vals)
+    freqs = np.zeros(max_val)
+
+    for i in vals:
+        freqs[i-1] += 1
+
+    xs = np.array([log(x+1) for x in filter(lambda x: freqs[x] != 0, range(max_vals))])
+    ys = np.array([log(float(freqs[x]) / len(vals)) for x in filter(lambda x: freqs[x] != 0, range(max_vals))])
+    linreg = sts.linregress(xs[10:100],ys[10:100])        
+    return -linreg[0]
+    
 
 def consumer_vendor_graph(c, v, purchase_rate=3, pop_exp=1, menu_variance=1, duration=None):
     """
     Generate a graph with vendors and consumers, where vendors sell a
     product, consumers buy the product, and also interact with one
-    another.
+    another, maybe.
 
     Some assumptions:
     Popularity of vendors is distributed as a power law.
-    Each vendor's menu is distributed normally with constant variance.
-    Each vendor's menu's mean is sampled from a zero-mean normal distribution
+    Each transaction is sampled from a zero-mean gaussian.
     Purchases are modeled as Poisson processes.
 
     Parameters:
@@ -44,7 +75,7 @@ def consumer_vendor_graph(c, v, purchase_rate=3, pop_exp=1, menu_variance=1, dur
         for timestamp in cons[con]:
             # Sample a vendor
             trans_vendor = _sample_dist(vend_pop)
-            trans_value = normal(loc=vend_menu[trans_vendor], scale=menu_variance)
+            trans_value = normal(scale=menu_variance)
             if trans_value < 0:
                 G.add_edge(trans_vendor, con, value=(-1 * trans_value), time=timestamp)
             else:
