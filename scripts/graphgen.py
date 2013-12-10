@@ -26,8 +26,11 @@ def generate_time_slices(slice_time=1, num_intervals=10, num_in_slice=10):
     valid_days = _days[low:high]
     for section in range(num_in_slice):
       start = random.choice(valid_days)
-      end = np.datetime64(graphtools.string_to_datetime(str(start))) + np.timedelta64(slice_time, 'D')
-      slices.append((start, int(str(end)[:10].replace('-',''))))
+      next_index = valid_days.index(start)+5
+      end = valid_days[valid_days.index(start)+5] if len(valid_days) -1 >= next_index  else valid_days[-1]
+      slices.append((start, end))
+#      end = np.datetime64(graphtools.string_to_datetime(str(start))) + np.timedelta64(slice_time, 'D')
+ #     slices.append((start, int(str(end)[:10].replace('-',''))))
     low += section_length
     high += section_length
   return slices

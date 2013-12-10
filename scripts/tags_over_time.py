@@ -44,7 +44,7 @@ def user_sell_frequency(g, stamp=''):
     frequency[freq] = frequency[freq] + 1 if frequency.get(freq) else 1
     node_to_freq[node] = freq
 
-  utils.save_node_data.save_node_map(node_to_freq, 'node_sell_freq_'+stamp)
+  utils.save_node_map(node_to_freq, 'node_sell_freq_'+stamp)
   # plot_node_data.plot_node_map(node_to_freq)
 
 def user_buy_frequency(g, stamp=''):
@@ -58,7 +58,7 @@ def user_buy_frequency(g, stamp=''):
     frequency[freq] = frequency[freq] + 1 if frequency.get(freq) else 1
     node_to_freq[node] = freq
 
-  utils.save_node_data.save_node_map(node_to_freq, 'node_buy_freq_'+stamp)
+  utils.save_node_map(node_to_freq, 'node_buy_freq_'+stamp)
   utils.save_node_map(frequency, 'freq_to_buy_'+stamp)
   # plot_node_data.plot_node_map(node_to_freq)
 
@@ -79,12 +79,12 @@ def user_transaction_amount(g, stamp=''):
   for node in g.nodes():
     total = 0.0
     for s, e, d in g.edges(node, data=True):
-      total += d['amount']
+      total += d['value']
     node_to_amount[node] = total
     rounded = int(total * _ROUND_FACTOR) / float(_ROUND_FACTOR)
     amount_frequency[rounded] = amount_frequency[rounded] + 1 if \
         amount_frequency.get(rounded) else 1
-  utils.save_node_data.save_node_map(node_to_amount, 'node_transaction_amount_'+stamp)
+  utils.save_node_map(node_to_amount, 'node_transaction_amount_'+stamp)
   utils.save_node_map(amount_frequency, 'amount_to_frequency_'+stamp)
   # plot_node_data.plot_node_map(node_to_amount)
 
