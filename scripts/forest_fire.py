@@ -88,7 +88,7 @@ def forestFire_mod_burnProcedure(G, node1, node2, myDict, p, r):
         forestFire_mod_burnProcedure(G, burn[i], node2, myDict, p, r)
 
 
-def forest_fire(n, p, r):
+def gen_forest_fire(n, p, r):
     """
     Generates a graph based on a modified Forest Fire model.
     This is a modified version of the Forest Fire model
