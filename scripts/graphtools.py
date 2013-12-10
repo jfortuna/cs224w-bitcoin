@@ -46,7 +46,7 @@ def get_node_max_in_degree(graph):
 
 def get_avg_out_degree_from_graph(graph):
     out_degrees = graph.out_degree()
-    return numpy.mean(out_degrees.values())
+    return np.mean(out_degrees.values())
 
 
 def get_avg_out_degree_from_dates(start, end):
@@ -63,9 +63,18 @@ def get_out_degrees_from_dates(start, end):
     return g_slice.out_degree()
 
 
+def get_num_nodes_edges_from_graph(graph):
+    return graph.number_of_nodes(), graph.number_of_edges()
+
+
 def get_num_nodes_edges_from_dates(start, end):
     g_slice = graphgen.get_graph_slice(start, end)
     return g_slice.number_of_nodes(), g_slice.number_of_edges()
+
+
+def get_frac_nodes_in_gcc_from_graph(g_slice):
+    nodes_in_gcc = len(nx.weakly_connected_components(g_slice)[0])
+    return float(nodes_in_gcc) / g_slice.number_of_nodes()
 
 
 def get_frac_nodes_in_gcc_from_dates(start, end):
@@ -77,6 +86,10 @@ def get_frac_nodes_in_gcc_from_dates(start, end):
 def get_effective_diameter_from_dates(start, end):
     g_slice = graphgen.get_graph_slice(start, end)
     return effective_diameter(g_slice)
+
+
+def get_diameter_from_graph(graph):
+    return nx.diameter(graph)
 
 
 def get_k_core_from_graph(graph):
