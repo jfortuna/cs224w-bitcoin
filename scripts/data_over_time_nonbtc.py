@@ -19,7 +19,6 @@ largest_scc = []
 dates = []
 avg_clust_p = []
 lccs_p = []
-largest_scc_p = []
 
 for start, end in slices:
   g = graphgen.get_graph_slice(start * _HMS, end * _HMS)
@@ -52,7 +51,6 @@ for start, end in slices:
   undir_g_p = nx.Graph(pfg.copy())
   avg_clust_p.append(nx.average_clustering(undir_g_p))
   lccs_p.append(len(graphtools.get_lcc_from_graph(pfg)))
-  largest_scc_p.append(len(graphtools.get_sccs_from_graph(pfg)[0]))
   
   print 'finished %s tag over time' % i
   i += 1
@@ -64,7 +62,6 @@ utils.save_lists(dates, largest_scc, stamp='gnp_largest_scc')
 
 utils.save_lists(dates, avg_clust_p, stamp='pfg_avg_clust')
 utils.save_lists(dates, lccs_p, stamp='pfg_lccs')
-utils.save_lists(dates, largest_scc_p, stamp='pfg_largest_scc')
 # plot single values over time
 # Gini coefficient (way to get single number from distribution)
 
