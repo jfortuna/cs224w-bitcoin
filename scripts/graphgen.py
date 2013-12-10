@@ -13,16 +13,16 @@ def generate_weighted_time_slices():
     section = len(early) / 24
     low = 0
     high = section
-    for i in range(24):
+    for i in range(23):
         valid_days = early[low:section]
         start = random.choice(valid_days)
         next_index = valid_days.index(start)+5
         end = valid_days[valid_days.index(start)+5] if len(valid_days) -1 >= next_index  else valid_days[-1]
         slices.append((start, end))
-        low += section_length
-        high += section_length
+        low += section
+        high += section
     rest = _days[_days.index(20110401):]
-    section = len(rest) / 200
+    section = len(rest) / 151
     low = 0
     high = section
     for i in range(150):
@@ -31,8 +31,8 @@ def generate_weighted_time_slices():
         next_index = valid_days.index(start)+5
         end = valid_days[valid_days.index(start)+5] if len(valid_days) -1 >= next_index  else valid_days[-1]
         slices.append((start, end))
-        low += section_length
-        high += section_length
+        low += section
+        high += section
 
 
 
