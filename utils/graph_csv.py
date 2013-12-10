@@ -41,9 +41,10 @@ def _get_vals_from_csv(filename):
   return data.values()
 
 if __name__ == '__main__':
-  # to_plot = '../csv_data/' + sys.argv[1]
-  # name = sys.argv[2]
-  # ylabel = sys.argv[3]
-  # _plot_vals_from_list(to_plot, name, ylabel)
-  ylabel = 'Gini Value for ' + sys.argv[3]
-  _plot_vals_from_time_slices(sys.argv[1], sys.argv[2], ylabel)
+  to_plot = '../csv_data/' + sys.argv[1]
+  name = sys.argv[2]
+  ylabel = sys.argv[3]
+  _plot_vals_from_list(to_plot, name, ylabel)
+  # ylabel = 'Gini Value for ' + sys.argv[3]
+  # _plot_vals_from_time_slices(sys.argv[1], sys.argv[2], ylabel)
+  
