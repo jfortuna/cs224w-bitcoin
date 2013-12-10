@@ -8,7 +8,7 @@ import graphtools
 import plot
 
 _MID_WAY_HIGH_BOUND = 500
-_MID_WAY_LOW_BOUND = 25
+_MID_WAY_LOW_BOUND = 10
 
 def find_one_many_one(g, margin):
   """ Finds one to many to one instances. First the algorithm identifies
@@ -24,7 +24,7 @@ def find_one_many_one(g, margin):
   starts, ends, total = _find_instances(g, ys, margin, ins, outs)
  # _save_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
  # _save_nodes(starts, ends)
-  # _plot_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
+  _plot_result(range(_MID_WAY_LOW_BOUND, _MID_WAY_HIGH_BOUND+1), ys)
   return total
 
 def _find_instances(g, ys, margin, ins, outs):
@@ -33,6 +33,7 @@ def _find_instances(g, ys, margin, ins, outs):
   ends = []
   
   for start in g.nodes():
+    print 'finished a start node'
     for end in g.nodes():
       if start == end:
         continue
@@ -40,9 +41,9 @@ def _find_instances(g, ys, margin, ins, outs):
       if not midways:
         continue
       if _verify_path(g, start, end, midways, margin):
-        ys[len(midways) - _MID_WAY_LOW_BOUND] += 1
-        starts.append(start)
-        ends.append(end)
+        ys[len(midways)] += 1
+        # starts.append(start)
+        # ends.append(end)
         total += 1
   return starts, ends, total
 
@@ -91,24 +92,22 @@ def _save_nodes(starts, ends):
 def _plot_result(xs, ys):
   fig = plt.figure(1)
   p = fig.add_subplot(111)
-  plt.plot(xs, ys, 'b', linewidth=2.0)
-  p.set_title("Average Occurance of X Midway Nodes")
+  p.bar(xs, ys)
+  p.set_title("Occurance of X Midway Nodes")
   p.set_xlabel("Number of Midway Nodes")
-  p.set_ylabel("Average Occurace")
+  p.set_ylabel("Occurance")
   plt.show()
 
 
 if __name__ == '__main__':
   days = graphgen._days[graphgen._days.index(20110401):]
-  totals = {}
-  for i in range(10):
-    start = random.choice(days)
-    next_index = days.index(start) + 10
-    end = days[next_index] if len(days) -1 >= next_index  else days[-1]
-    vals = find_one_many_one(graphgen.get_graph_slice(start * graphgen._HMS, end * graphgen._HMS), .04)
-    totals[start] = vals
-    print '%d iteration complet' % i
+  # totals = {}
+  start = random.choice(days)
+  next_index = days.index(start) + 10
+  end = days[next_index] if len(days) -1 >= next_index  else days[-1]
+  vals = find_one_many_one(graphgen.get_graph_slice(start * graphgen._HMS, end * graphgen._HMS), .04)
+  # totals[start] = vals
  
-  plot.plot_frequency_map(totals, title='Money Laundering Instances Over Time',
-      xlabel='Date', ylabel='Money Laundering Instances', show=True)
+  # plot.plot_frequency_map(totals, title='Money Laundering Instances Over Time',
+  #     xlabel='Date', ylabel='Money Laundering Instances', show=True)
 
