@@ -4,7 +4,7 @@ This file is for generic plotting
 
 import matplotlib.pyplot as plt
 import matplotlib
-from scripts import graphtools
+import graphtools
 
 
 def plot_frequency_map(*maps, **plotargs):
