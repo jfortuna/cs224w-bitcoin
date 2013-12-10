@@ -5,6 +5,38 @@ import random
 import graphtools
 import numpy as np
 
+_START_ACTIVITY = 20110401
+
+def generate_weighted_time_slices():
+    slices = []
+    early = _days[:_days.index(20110401)]
+    section = len(early) / 24
+    low = 0
+    high = section
+    for i in range(24):
+        valid_days = early[low:section]
+        start = random.choice(valid_days)
+        next_index = valid_days.index(start)+5
+        end = valid_days[valid_days.index(start)+5] if len(valid_days) -1 >= next_index  else valid_days[-1]
+        slices.append((start, end))
+        low += section_length
+        high += section_length
+    rest = _days[_days.index(20110401):]
+    section = len(rest) / 200
+    low = 0
+    high = section
+    for i in range(150):
+        valid_days = rest[low:section]
+        start = random.choice(valid_days)
+        next_index = valid_days.index(start)+5
+        end = valid_days[valid_days.index(start)+5] if len(valid_days) -1 >= next_index  else valid_days[-1]
+        slices.append((start, end))
+        low += section_length
+        high += section_length
+
+
+
+
 def generate_time_slices(slice_time=1, num_intervals=10, num_in_slice=10):
   """ Returns a list of tuples that represent time slices from the
       graph.
