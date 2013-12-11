@@ -15,7 +15,7 @@ def bucketed_sccs(g, stamp=''):
     buckets = _count_size_of_property(sccs)
 
 def _node_and_edges(start, end):
-    g = graphgen.get_graph_slice(start * graphtools._HMS, end * graphtools._HMS)
+    g = graphgen.get_graph_slice(start * 1000000, end * 1000000)
     if len(g) == 0:
         return 0, 0
     return g.number_of_nodes(), g.number_of_edges()
