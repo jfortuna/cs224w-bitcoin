@@ -13,13 +13,16 @@ def cv_from_btc(start, end):
     Give it a start and an end time, and it randomly generates a cv-graph
     to match that time slice
     """
+    if start < 20140101 and end < 20140101:
+        start *= 1000000
+        end *= 1000000
     g = get_graph_slice(start, end)
     if len(g) == 0:
         return g
     v = len(g) / 100
     c = len(g) - v
     s2d = lambda t: string_to_datetime(str(t))
-    duration = 604800
+    duration = 5*24*60*60
     if 'total_seconds' in dir(s2d(end) - s2d(start)):
         duration = (s2d(end) - s2d(start)).total_seconds()
     rate = float(len(g.edges())) / (c * duration)

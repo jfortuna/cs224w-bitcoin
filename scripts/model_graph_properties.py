@@ -18,8 +18,12 @@ def all_computations():
     frac_nodes_in_gcc = {}
     num_nodes = []
     num_edges = []
-    for start, end in slices:
+    for i in range(len(slices)):
+        print i, " slices out of ", len(slices)
+        start, end = slices[i]
         g = cv_from_btc(start, end)
+        if len(g) == 0:
+            continue
         num_nodes.append(g.number_of_nodes())
         num_edges.append(g.number_of_edges())
         avg_out_deg = graphtools.get_avg_out_degree_from_graph(g)
@@ -28,9 +32,9 @@ def all_computations():
         frac_nodes = graphtools.get_frac_nodes_in_gcc_from_graph(g)
         frac_nodes_in_gcc[start] = frac_nodes
 
-    utils.save_node_map(avg_out_degrees_r, ("avg_out_degrees_model"))
+    utils.save_node_map(avg_out_degrees, ("avg_out_degrees_model"))
 
-    utils.save_node_map(frac_nodes_in_gcc_p, ("frac_nodes_in_gcc_model"))
+    utils.save_node_map(frac_nodes_in_gcc, ("frac_nodes_in_gcc_model"))
     utils.save_lists(num_nodes, num_edges, ("nodes_vs_edges_model"))
 
 def main(args):
