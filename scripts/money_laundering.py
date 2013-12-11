@@ -76,7 +76,7 @@ def _verify_path(g, s, e, midways, margin):
     
     if out_sum / float(in_sum) <= margin:
       return True
-    print 'found a structure, but ignoring'
+    #print 'found a structure, but ignoring'
   return False
 
 def _save_result(xs, ys):

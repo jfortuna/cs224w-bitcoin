@@ -21,7 +21,7 @@ def cv_from_btc(start, end):
     rate = float(len(g.edges())) / (c * duration)
     powerlaw = 1 + len(g) / sum(map(lambda x: log(x), g.degree().values()))
     std = np.std(map(lambda e: e[2]['value'] / 2, g.edges(data=True)))
-    return g,consumer_vendor_graph(c, v, purchase_rate=1.0/rate, pop_exp=powerlaw, menu_variance=std**2, duration=duration)
+    return consumer_vendor_graph(c, v, purchase_rate=1.0/rate, pop_exp=powerlaw, menu_variance=std**2, duration=duration)
 
 
 def sample_powerlaw(alpha):
