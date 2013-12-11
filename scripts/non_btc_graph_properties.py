@@ -15,7 +15,7 @@ def bucketed_sccs(g, stamp=''):
     buckets = _count_size_of_property(sccs)
 
 def _node_and_edges(start, end):
-    g = graphgen.get_graph_slice(start * _HMS, end * _HMS)
+    g = graphgen.get_graph_slice(start * graphtools._HMS, end * graphtools._HMS)
     if len(g) == 0:
         return 0, 0
     return g.number_of_nodes(), g.number_of_edges()
@@ -98,8 +98,9 @@ def all_computations():
     frac_nodes_in_gcc_p = {}
     frac_nodes_in_gcc_r = {}
 
-
+    i = 0
     for start, end in slices:
+        print 'slice %s of %s' % (i, len(slices))
         n, m = _node_and_edges(start, end)
         if n == 0:
             continue
@@ -127,20 +128,21 @@ def all_computations():
     utils.save_node_map(frac_nodes_in_gcc_p, ("frac_nodes_in_gcc_p"))
 
 def main(args):
-    if len(args) == 1:
-        arg = args[0]
-        if arg == '1':
-            avg_out_degree_over_time()
-        elif arg == '2':
-            nodes_vs_edges_over_time()
-        elif arg == '3':
-            frac_nodes_in_gcc_over_time()
-        elif arg == '4':
-            effective_diameter_over_time()
-        else:
-            print "Usage: 1, 2, 3, 4"
-    else:
-        all_computations()
+    all_computations()
+    # if len(args) == 1:
+    #     arg = args[0]
+    #     if arg == '1':
+    #         avg_out_degree_over_time()
+    #     elif arg == '2':
+    #         nodes_vs_edges_over_time()
+    #     elif arg == '3':
+    #         frac_nodes_in_gcc_over_time()
+    #     elif arg == '4':
+    #         effective_diameter_over_time()
+    #     else:
+    #         print "Usage: 1, 2, 3, 4"
+    # else:
+    #     all_computations()
 
 
 if __name__ == '__main__':

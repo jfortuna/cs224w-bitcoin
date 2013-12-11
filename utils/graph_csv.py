@@ -39,7 +39,7 @@ def _get_vals_from_csv(filename):
     data = {float(rows[0]):float(rows[1]) for rows in reader}
   return data.values()
 
-ef calc_gini(x): 
+def calc_gini(x): 
     x = list(x)
     N = len(x)
     x. sort() # increasing order
