@@ -6,7 +6,6 @@ import sys
 import os
 from os import listdir
 from os.path import isfile, join
-from scripts import graphtools
 
 
 def _plot_vals_from_list(to_plot, title, ylabel, xlabel='Date'):
@@ -26,8 +25,8 @@ def _plot_vals_from_time_slices(prefix, title, ylable):
       start, end = _extract_start_and_end(filename[len(prefix) + 1:])
       # start, end = _extract_start_and_end(filename)
       vals = _get_vals_from_csv(filename)
-      graphtools.calc_gini(vals)
-      to_graph[start] = graphtools.calc_gini(vals)
+      calc_gini(vals)
+      to_graph[start] = calc_gini(vals)
   plot.plot_frequency_map(to_graph, title=title, ylabel=ylabel, xlabel='Date', show=True)
 
 def _extract_start_and_end(start_and_end):
@@ -39,6 +38,14 @@ def _get_vals_from_csv(filename):
     reader = csv.reader(infile)
     data = {float(rows[0]):float(rows[1]) for rows in reader}
   return data.values()
+
+ef calc_gini(x): 
+    x = list(x)
+    N = len(x)
+    x. sort() # increasing order
+    G = sum(x[i] * (N-i) for i in range(N)) 
+    G = 2.0 * G / (N * sum(x))
+    return (1 + 1.0 / N) - G
 
 if __name__ == '__main__':
   # to_plot = '../csv_data/' + sys.argv[1]

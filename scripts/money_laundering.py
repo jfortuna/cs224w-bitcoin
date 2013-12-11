@@ -107,7 +107,7 @@ if __name__ == '__main__':
   start = random.choice(days)
   next_index = days.index(start) + 10
   end = days[next_index] if len(days) -1 >= next_index  else days[-1]
-  vals = find_one_many_one(cv_to_btc(start * graphgen._HMS, end * graphgen._HMS), .04)
+  vals = find_one_many_one(cv_from_btc(start * graphgen._HMS, end * graphgen._HMS), .04)
   # totals[start] = vals
  
   # plot.plot_frequency_map(totals, title='Money Laundering Instances Over Time',
