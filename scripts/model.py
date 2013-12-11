@@ -14,13 +14,19 @@ def cv_from_btc(start, end):
     to match that time slice
     """
     g = get_graph_slice(start, end)
+    if len(g) == 0:
+        return g
     v = len(g) / 100
     c = len(g) - v
     s2d = lambda t: string_to_datetime(str(t))
-    duration = (s2d(end) - s2d(start)).total_seconds()
+    duration = 604800
+    if 'total_seconds' in dir(s2d(end) - s2d(start)):
+        duration = (s2d(end) - s2d(start)).total_seconds()
     rate = float(len(g.edges())) / (c * duration)
     powerlaw = 1 + len(g) / sum(map(lambda x: log(x), g.degree().values()))
-    std = np.std(map(lambda e: e[2]['value'] / 2, g.edges(data=True)))
+    vals = map(lambda e: e[2]['value'] / 2, g.edges(data=True))
+    std = np.std(vals + map(lambda x: -1.0 * x, vals))
+    # default behavior, ignore computed duration
     return consumer_vendor_graph(c, v, purchase_rate=1.0/rate, pop_exp=powerlaw, menu_variance=std**2, duration=duration)
 
 
